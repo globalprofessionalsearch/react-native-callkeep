@@ -311,6 +311,35 @@ RCT_EXPORT_METHOD(isCallActive:(NSString *)uuidString)
     [RNCallKeep isCallActive: uuidString];
 }
 
+RCT_EXPORT_METHOD(getValue:(RCTResponseSenderBlock)callback)
+{
+     dispatch_async(dispatch_get_main_queue(), ^{
+    NSString *str = [[NSUserDefaults standardUserDefaults] valueForKey:@"salman"];
+    id val = str == nil ? [NSNull null] : str;
+    NSLog(@"STR: %@", val);
+    callback(@[[NSNull null], val]); // (error, someData) in js
+    [[NSUserDefaults standardUserDefaults] setValue:@"Akif" forKey:@"salman"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+          });
+}
+
+RCT_EXPORT_METHOD(getCallStatus:(NSString *)uuidString callback:(RCTResponseSenderBlock)callback)
+{
+     dispatch_async(dispatch_get_main_queue(), ^{
+    CXCallObserver *callObserver = [[CXCallObserver alloc] init];
+    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:uuidString];
+    NSString *callStatus = @"0";
+
+    for(CXCall *call in callObserver.calls){
+        NSLog(@"[RNCallKeep] isCallActive %@ %d ?", call.UUID, [call.UUID isEqual:uuid]);
+        if([call.UUID isEqual:[[NSUUID alloc] initWithUUIDString:uuidString]] && call.hasConnected){
+            callStatus =  @"1";
+        }
+    }
+    callback(@[[NSNull null], callStatus]);
+          });
+}
+
 - (void)requestTransaction:(CXTransaction *)transaction
 {
 #ifdef DEBUG

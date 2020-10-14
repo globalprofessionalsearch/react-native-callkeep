@@ -30,6 +30,18 @@ class RNCallKeep {
     });
   }
 
+  getValue = (callBack) => {
+    RNCallKeepModule.getValue((error, data) => {
+      callBack(error, data);
+    });
+  };
+
+  getCallStatus = (uuid, callBack) => {
+    RNCallKeepModule.getCallStatus(uuid, (error, data) => {
+      callBack(error, data);
+    });
+  };
+
   addEventListener = (type, handler) => {
     const listener = listeners[type](handler);
 
