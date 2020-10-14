@@ -699,6 +699,8 @@ RCT_EXPORT_METHOD(reportUpdatedCall:(NSString *)uuidString contactIdentifier:(NS
 // Answering incoming call
 - (void)provider:(CXProvider *)provider performAnswerCallAction:(CXAnswerCallAction *)action
 {
+    [[NSUserDefaults standardUserDefaults] setValue:[action.callUUID.UUIDString lowercaseString] forKey:@"salman"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 #ifdef DEBUG
     NSLog(@"[RNCallKeep][CXProviderDelegate][provider:performAnswerCallAction]");
 #endif
