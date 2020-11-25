@@ -699,7 +699,7 @@ RCT_EXPORT_METHOD(reportUpdatedCall:(NSString *)uuidString contactIdentifier:(NS
 // Answering incoming call
 - (void)provider:(CXProvider *)provider performAnswerCallAction:(CXAnswerCallAction *)action
 {
- dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
     [[NSUserDefaults standardUserDefaults] setValue:[action.callUUID.UUIDString lowercaseString] forKey:@"salman"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 #ifdef DEBUG
@@ -714,11 +714,13 @@ RCT_EXPORT_METHOD(reportUpdatedCall:(NSString *)uuidString contactIdentifier:(NS
 // Ending incoming call
 - (void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action
 {
+dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 #ifdef DEBUG
     NSLog(@"[RNCallKeep][CXProviderDelegate][provider:performEndCallAction]");
 #endif
     [self sendEventWithNameWrapper:RNCallKeepPerformEndCallAction body:@{ @"callUUID": [action.callUUID.UUIDString lowercaseString] }];
     [action fulfill];
+     });
 }
 
 -(void)provider:(CXProvider *)provider performSetHeldCallAction:(CXSetHeldCallAction *)action
